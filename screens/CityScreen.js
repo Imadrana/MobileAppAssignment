@@ -1,0 +1,30 @@
+import React from "react";
+import { View, Text, Image, Button, StyleSheet, Linking } from "react-native";
+
+const CityScreen = ({ city, link }) => {
+    return (
+        <View style={styles.container}>
+        <Text style={styles.title}>{city}</Text>
+        <Image
+            source={city === "Calgary" ? require("../assets/calgary.jpg") : require("../assets/edmonton.jpg")}
+            style={styles.image}
+        />
+        <Button title="Go to City Page" onPress={() => Linking.openURL(link)} />
+        <Text style={styles.info}>
+            {city === "Calgary"
+                ? "Calgary is known for the Stampede and stunning Rocky Mountain views."
+                : "Edmonton is known for its river valley and large mall."}
+        </Text>
+    </View>
+
+    );
+};
+
+const styles = StyleSheet.create({
+    container: { flex: 1, alignItems: "center", justifyContent: "center", padding: 20 },
+    title: { fontSize: 24, fontWeight: "bold" },
+    image: { width: 300, height: 200, marginVertical: 20 },
+    info: { fontSize: 16, textAlign: "center", marginTop: 10 },
+});
+
+export default CityScreen;
