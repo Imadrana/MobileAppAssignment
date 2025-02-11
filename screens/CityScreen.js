@@ -1,3 +1,4 @@
+// Hassan Mir
 import React from "react";
 import { View, Text, Image, Button, StyleSheet, Linking } from "react-native";
 
