@@ -1,3 +1,4 @@
+// Hassan Mir
 import React from "react";
 import { View, Text, Image, Button, StyleSheet, Linking } from "react-native";
 
@@ -12,8 +13,8 @@ const CityScreen = ({ city, link }) => {
         <Button title="Go to City Page" onPress={() => Linking.openURL(link)} />
         <Text style={styles.info}>
             {city === "Calgary"
-                ? "Calgary is known for the Stampede and stunning Rocky Mountain views."
-                : "Edmonton is known for its river valley and large mall."}
+                ? "The Stampede and Rocky Mountain views have become symbols that define the city of Calgary."
+                : "Edmonton gains notoriety from its extensive river valley as well as its massive shopping center."}
         </Text>
     </View>
 
