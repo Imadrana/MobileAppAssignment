@@ -1,66 +1,42 @@
-//Imad Rana
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, Alert, StyleSheet } from "react-native";
+import { View, Text, TextInput, Button, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import credentials from "../credentials.json"; 
+import { supabase } from "../supabase"; // Import Supabase client
 
 const SignInScreen = () => {
-    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigation = useNavigation();
 
-    
-    const validatePassword = (password) => {
-        return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password);
-    };
-
-    const handleLogin = () => {
-        if (username.length < 5) {
-            Alert.alert("Error", "Username must be at least 5 characters long.");
-            return;
-        }
-        if (!validatePassword(password)) {
-            Alert.alert(
-                "Error",
-                "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character."
-            );
+    const handleLogin = async () => {
+        if (!email.includes("@")) {
+            Alert.alert("Error", "Please enter a valid email address.");
             return;
         }
 
-        
-        const user = credentials.users.find(user => user.username === username && user.password === password);
-        if (user) {
-            navigation.navigate("Welcome");
+        if (password.length < 8) {
+            Alert.alert("Error", "Password must be at least 8 characters long.");
+            return;
+        }
+
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+        if (error) {
+            Alert.alert("Error", "Invalid email or password.");
         } else {
-            Alert.alert("Error", "Invalid username or password.");
+            navigation.navigate("Welcome"); // Redirect to Welcome Screen
         }
     };
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Sign In</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Username"
-                onChangeText={setUsername}
-                value={username}
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Password"
-                onChangeText={setPassword}
-                value={password}
-                secureTextEntry
-            />
+        <View>
+            <Text>Sign In</Text>
+            <TextInput placeholder="Email" onChangeText={setEmail} keyboardType="email-address" />
+            <TextInput placeholder="Password" onChangeText={setPassword} secureTextEntry />
             <Button title="Sign In" onPress={handleLogin} />
+            <Button title="Don't have an account? Sign Up" onPress={() => navigation.navigate("SignUp")} />
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: { flex: 1, justifyContent: "center", padding: 20 },
-    title: { fontSize: 24, textAlign: "center", marginBottom: 20 },
-    input: { borderWidth: 1, padding: 10, marginBottom: 10, borderRadius: 5 }
-});
 
 export default SignInScreen;
